@@ -1,0 +1,18 @@
+[user]
+	name = Richar Siri
+	email = ricardosiri68@gmail.com
+[core]
+	editor = vim
+	compression = 0
+	packedGitLimit = 512m 
+	packedGitWindowSize = 512m 
+[merge]
+	tool = vimdiff
+[http]
+	postBuffer = 1048576000
+[pack] 
+	deltaCacheSize = 2047m 
+	packSizeLimit = 2047m 
+	windowMemory = 2047m
+[push]
+	default = simple
