@@ -40,6 +40,12 @@ if dein#load_state('/home/smoke/.vim/dein_bundle/')
   " DENITE
   call dein#add('Shougo/denite.nvim')
 
+  " Track the engine.
+  call dein#add('SirVer/ultisnips')
+
+  " Snippets are separated from the engine. Add this if you want them:
+  call dein#add('honza/vim-snippets')
+
   " Required:
   call dein#end()
   call dein#save_state()
@@ -103,9 +109,9 @@ call denite#custom#var('grep', 'recursive_opts', [])
 call denite#custom#var('grep', 'pattern_opt', [])
 call denite#custom#var('grep', 'separator', ['--'])
 call denite#custom#var('grep', 'final_opts', [])
-" call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call denite#custom#source('file_rec', 'matchers', ['matcher_fuzzy', 'matcher_project_files'])
 
-call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '--hidden', '-g', ''])
+call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '--hidden', '-g',  ''])
 
 " seleccionar buffer
 nnoremap <leader>s :Denite -mode=normal buffer<cr>
@@ -157,7 +163,28 @@ set statusline="%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%
 set laststatus=2
 
 
+" FILETYPE BINDING
+"------------------------------------------------------------------------------------------------------------------------
+au! BufNewFile,BufRead *.jinja2 setf htmldjango
+
+
 " HELP NAVIGATION
 "------------------------------------------------------------------------------------------------------------------------
 nnoremap <F8> <C-T>
 nnoremap <F9> <C-]>
+
+" REDRAW BUFFER
+"------------------------------------------------------------------------------------------------------------------------
+nnoremap <F3> :redraw!<CR>
+
+
+" ULTISNIPS: a snippets tool
+"------------------------------------------------------------------------------------------------------------------------
+
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
