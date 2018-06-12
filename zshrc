@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/home/smoke/.oh-my-zsh
+export ZSH=/home/richar/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -85,5 +85,7 @@ export LANG=es_AR.UTF-8
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 alias tmux="tmux -2 -u"
-export PATH="$PATH:$HOME/.composer/vendor/bin:$HOME/.cargo/bin"
+alias pbcopy='xsel --clipboard --input'
+alias pbpaste='xsel --clipboard --output'
+export PATH="$PATH:$HOME/.config/composer/vendor/bin:$HOME/.cargo/bin"
 export XDG_CONFIG_HOME=$HOME/.config

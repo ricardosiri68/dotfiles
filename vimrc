@@ -1,7 +1,11 @@
 " GENERAL INITAL CONFIG
 "------------------------------------------------------------------------------------------------------------------------
+scriptencoding utf-8
+set encoding=utf-8
+set fileencodings=utf-8
 set clipboard=unnamedplus
 let mapleader=" " " mapea la tecla lider para que sea la barra espaciadora
+:set ff=unix
 
 
 " DEIN (Package Manager)
@@ -11,15 +15,15 @@ if &compatible
 endif
 "
 " Required:
-set runtimepath+=/home/smoke/.vim/dein_bundle/repos/github.com/Shougo/dein.vim
+set runtimepath+=~/.vim/dein_bundle/repos/github.com/Shougo/dein.vim
 
 " Required:
-if dein#load_state('/home/smoke/.vim/dein_bundle/')
-  call dein#begin('/home/smoke/.vim/dein_bundle')
+if dein#load_state('~/.vim/dein_bundle/')
+  call dein#begin('~/.vim/dein_bundle')
 
   " Let dein manage dein
   " Required:
-  call dein#add('/home/smoke/.vim/dein_bundle/repos/github.com/Shougo/dein.vim')
+  call dein#add('~/.vim/dein_bundle/repos/github.com/Shougo/dein.vim')
   " You can specify revision/branch/tag.
   " call dein#add('Shougo/vimshell', { 'rev': '3787e5' })
   "
@@ -46,6 +50,9 @@ if dein#load_state('/home/smoke/.vim/dein_bundle/')
   " Snippets are separated from the engine. Add this if you want them:
   call dein#add('honza/vim-snippets')
 
+  " TypeScript Syntax Highlighting
+  call dein#add('leafgarland/typescript-vim')
+
   " Required:
   call dein#end()
   call dein#save_state()
@@ -55,6 +62,13 @@ endif
 filetype plugin indent on
 syntax enable
 
+
+"
+" IDENTATION REPECENTATION
+"------------------------------------------------------------------------------------------------------------------------
+set whichwrap+=<,>,h,l,[,]
+set breakindent
+set listchars=eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨,tab:┆·,space:_
 
 " COLOR AND THEME (solarized theme)
 "------------------------------------------------------------------------------------------------------------------------
@@ -91,6 +105,9 @@ let g:syntastic_php_phpcs_args = '--standard=vendor/pragmarx/laravelcs/Standards
 
 " Python checkers
 let g:syntastic_python_checkers = ['flake8', 'pylint']
+
+" Typescript checkers
+let g:syntastic_typescript_checkers = ['tslint', 'tsc']
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
@@ -145,16 +162,10 @@ map <C-c> <nop>
 vmap <C-c> <nop>
 
 
-" PYTHN BINDINGS
-"------------------------------------------------------------------------------------------------------------------------
-" IPDB breakpoints
-map <silent> <leader>b oimport ipdb; ipdb.set_trace()<esc>
-map <silent> <leader>B Oimport ipdb; ipdb.set_trace()<esc>
-
 
 " EMMET
 "------------------------------------------------------------------------------------------------------------------------
-autocmd FileType html,css,js EmmetInstall
+autocmd FileType html,css,js,ts EmmetInstall
 
 
 " STATUS LINE

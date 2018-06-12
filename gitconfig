@@ -1,11 +1,12 @@
 [user]
 	name = Richar Siri
-	email = ricardosiri68@gmail.com
+	email = rsi@3818.com.ar
 [core]
 	editor = vim
 	compression = 0
 	packedGitLimit = 512m 
 	packedGitWindowSize = 512m 
+	autocrlf = true
 [merge]
 	tool = vimdiff
 [http]
@@ -16,3 +17,5 @@
 	windowMemory = 2047m
 [push]
 	default = simple
+[cola]
+	spellcheck = false
