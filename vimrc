@@ -5,7 +5,7 @@ set encoding=utf-8
 set fileencodings=utf-8
 set clipboard=unnamedplus
 let mapleader=" " " mapea la tecla lider para que sea la barra espaciadora
-:set ff=unix
+set ff=unix
 
 
 " DEIN (Package Manager)
@@ -53,6 +53,9 @@ if dein#load_state('~/.vim/dein_bundle/')
   " TypeScript Syntax Highlighting
   call dein#add('leafgarland/typescript-vim')
 
+  " Vue plugin
+  call dein#add('posva/vim-vue')
+
   " Required:
   call dein#end()
   call dein#save_state()
@@ -64,11 +67,13 @@ syntax enable
 
 
 "
+" TODO: buscando una manera de implementar la reprecentacion de los tabs de
+" alguna manera
 " IDENTATION REPECENTATION
 "------------------------------------------------------------------------------------------------------------------------
-set whichwrap+=<,>,h,l,[,]
-set breakindent
-set listchars=eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨,tab:┆·,space:_
+" set whichwrap+=<,>,h,l,[,]
+" set breakindent
+" set listchars=eol:↲,nbsp:_,trail:•,extends:⟩,precedes:⟨,tab:┆·,space:_
 
 " COLOR AND THEME (solarized theme)
 "------------------------------------------------------------------------------------------------------------------------
