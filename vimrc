@@ -29,6 +29,12 @@ if dein#load_state('~/.vim/dein_bundle/')
   "
   " Add or remove your plugins here:
 
+  " NERDTree
+  call dein#add('scrooloose/nerdtree')
+
+  " BLADE
+  call dein#add('jwalton512/vim-blade')
+
   " FUGITIVE
   call dein#add('tpope/vim-fugitive')
 
@@ -204,3 +210,10 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
+
+" CTAGS CONTROL
+map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
+" NERDTree
+let g:NERDTreeWinSize = 50
+map <F2> :NERDTreeToggle<CR>
