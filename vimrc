@@ -29,8 +29,8 @@ if dein#load_state('~/.vim/dein_bundle/')
   "
   " Add or remove your plugins here:
 
-  " NERDTree
-  call dein#add('scrooloose/nerdtree')
+  " TAGBAR
+  call dein#add('majutsushi/tagbar')
 
   " BLADE
   call dein#add('jwalton512/vim-blade')
@@ -214,6 +214,14 @@ let g:UltiSnipsEditSplit="vertical"
 " CTAGS CONTROL
 map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
-" NERDTree
-let g:NERDTreeWinSize = 50
-map <F2> :NERDTreeToggle<CR>
+" NETRW
+let g:netrw_banner = 0
+let g:netrw_liststyle = 1
+map <F2> :Ex .<CR>
+
+" TAGBAR
+let g:tagbar_width = 60
+nmap <F3> :TagbarToggle<CR>
+
+" FOLDING
+map <C-f> zfa{
