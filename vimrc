@@ -29,6 +29,14 @@ if dein#load_state('~/.vim/dein_bundle/')
   "
   " Add or remove your plugins here:
 
+  " Indexer
+  call dein#add('vim-scripts/vimprj')
+  call dein#add('vim-scripts/DfrankUtil')
+  call dein#add('vim-scripts/indexer.tar.gz')
+
+  " PHP Complete
+  call dein#add('shawncplus/phpcomplete.vim')
+
   " TAGBAR
   call dein#add('majutsushi/tagbar')
 
@@ -37,6 +45,9 @@ if dein#load_state('~/.vim/dein_bundle/')
 
   " FUGITIVE
   call dein#add('tpope/vim-fugitive')
+
+  " GITGUTTER
+  call dein#add('airblade/vim-gitgutter')
 
   " SYNTASTIC
   call dein#add('vim-syntastic/syntastic')
@@ -61,6 +72,9 @@ if dein#load_state('~/.vim/dein_bundle/')
 
   " Vue plugin
   call dein#add('posva/vim-vue')
+
+  " LOG FILES
+  call dein#add('dzeban/vim-log-syntax')
 
   " Required:
   call dein#end()
@@ -225,3 +239,9 @@ nmap <F3> :TagbarToggle<CR>
 
 " FOLDING
 map <C-f> zfa{
+
+" GITGUTTER
+map <F7> :GitGutterToggle
+
+" PHP Complete
+let g:phpcomplete_parse_docblock_comments = 1
