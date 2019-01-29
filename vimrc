@@ -35,7 +35,6 @@ if dein#load_state('~/.vim/dein_bundle/')
   call dein#add('vim-scripts/indexer.tar.gz')
 
   " PHP Complete
-  call dein#add('shawncplus/phpcomplete.vim')
 
   " TAGBAR
   call dein#add('majutsushi/tagbar')
@@ -75,6 +74,8 @@ if dein#load_state('~/.vim/dein_bundle/')
 
   " LOG FILES
   call dein#add('dzeban/vim-log-syntax')
+
+  call dein#add('echuraev/translate-shell.vim')
 
   " Required:
   call dein#end()
@@ -125,8 +126,8 @@ set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 " PHP checkers
-let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
-let g:syntastic_php_phpcs_args = '--standard=vendor/pragmarx/laravelcs/Standards/Laravel'                            
+"let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
+let g:syntastic_php_checkers = ['php', 'phpmd']
 
 " Python checkers
 let g:syntastic_python_checkers = ['flake8', 'pylint']
@@ -245,3 +246,10 @@ map <F7> :GitGutterToggle
 
 " PHP Complete
 let g:phpcomplete_parse_docblock_comments = 1
+
+" TRANS
+let g:trans_history_file = '~/trans_history.csv'
+let g:trans_save_history = 1
+let g:trans_advanced_options = "-brief -e bing"
+let g:trans_default_direction = ":pt+es"
+vnoremap <silent> <leader>T :Trans -brief<CR>
