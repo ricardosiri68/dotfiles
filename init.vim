@@ -42,6 +42,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'ncm2/ncm2-ultisnips'
     Plug 'SirVer/ultisnips' | Plug 'phux/vim-snippets'
     Plug 'ludovicchabant/vim-gutentags'
+    Plug 'skywind3000/gutentags_plus'
     Plug 'StanAngeloff/php.vim', {'for': 'php'}
     Plug 'w0rp/ale'
     Plug 'Shougo/denite.nvim'
@@ -62,6 +63,20 @@ let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 let g:ultisnips_php_scalar_types = 1
+
+" GUTENTAGS
+"------------------------------------------------------------------------------------------------------------------------
+" enable gtags module
+let g:gutentags_modules = ['ctags', 'gtags_cscope']
+
+" config project root markers.
+let g:gutentags_project_root = ['.root']
+
+" generate datebases in my cache directory, prevent gtags files polluting my project
+" let g:gutentags_cache_dir = expand('~/.cache/tags')
+
+" change focus to quickfix window after search (optional).
+let g:gutentags_plus_switch = 1
 
 " ALE
 "------------------------------------------------------------------------------------------------------------------------
