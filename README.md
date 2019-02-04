@@ -1,6 +1,10 @@
-STORE AND LOAD TILIX CONFIG
+### STORE TILIX CONFIG
 *backup:*
-```dconf dump /com/gexperts/Tilix/ > $HOME/.config/tilix.conf```
+```
+dconf dump /com/gexperts/Tilix/ > $HOME/.config/tilix.conf
+```
 
-*restore:*
-```dconf load /com/gexperts/Tilix/ < $HOME/.config/tilix.conf```
+### INSTALL ENVIROMENT
+```
+./install.sh
+```
