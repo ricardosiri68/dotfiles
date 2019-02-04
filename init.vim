@@ -147,6 +147,7 @@ nnoremap <leader>y :Denite -mode=normal register<cr>
 
 " COLORSCHEME
 " ------------------------------------------------------------------------------------------------------------------------
+set termguicolors
 colorscheme NeoSolarized
 
 " BUFFER NAVIGATION
