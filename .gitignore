@@ -1,2 +1,6 @@
 tags
 .git/
+pkgs/
+GPATH
+GRTAGS
+GTAGS
