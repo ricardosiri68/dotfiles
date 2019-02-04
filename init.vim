@@ -36,7 +36,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'roxma/nvim-yarp'
     Plug 'ncm2/ncm2-bufword'
     Plug 'ncm2/ncm2-path'
-    Plug 'roxma/vim-hug-neovim-rpc'
+    Plug 'neomake/neomake'
     Plug 'phpactor/phpactor', { 'do': ':call phpactor#Update()', 'for': 'php'}
     Plug 'phpactor/ncm2-phpactor', {'for': 'php'}
     Plug 'ncm2/ncm2-ultisnips'
