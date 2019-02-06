@@ -9,6 +9,7 @@ set number " mustra la columna con el numero de linea
 set noswapfile " no genera archivos *.swp
 set nowrap
 set clipboard+=unnamedplus
+set nohlsearch
 let mapleader=" " " mapea la tecla lider para que sea la barra espaciadora
 filetype plugin indent on
 
