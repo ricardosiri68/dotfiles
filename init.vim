@@ -54,6 +54,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'posva/vim-vue'
     Plug 'dzeban/vim-log-syntax'
     Plug 'echuraev/translate-shell.vim'
+    Plug 'kshenoy/vim-signature'
 
 call plug#end()
 
