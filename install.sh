@@ -21,7 +21,7 @@ function aur_install {
 aur_install universal-ctags-git
 aur_install global
 sudo python3 -m pip install pynvim ueberzug
-sudo pacman -Syu --noconfirm w3m composer xclip xsel
+sudo pacman -Syu --noconfirm w3m composer xclip xsel bat diff-so-fancy tldr hub
 composer global require phpmd/phpmd squizlabs/php_codesniffer phpstan/phpstan friendsofphp/php-cs-fixer
 
 # MAKE SYMBOL LINKS AND LOAD CONFIGS

@@ -61,7 +61,7 @@ ZSH_THEME="avit"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git virtualenv tmux docker-compose docker vi-mode)
+plugins=(git virtualenv tmux docker-compose docker vi-mode colored-man-pages)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -100,5 +100,6 @@ export PATH="$PATH:$HOME/.config/composer/vendor/bin:$HOME/.cargo/bin"
 export XDG_CONFIG_HOME=$HOME/.config
 # vim default editor
 VISUAL=vim;
-export VISUAL EDITOR=vim;
+export VISUAL EDITOR=nvim;
 export EDITOR
+alias help="tldr"
