@@ -127,15 +127,22 @@ call denite#custom#var('grep', 'recursive_opts', [])
 call denite#custom#var('grep', 'pattern_opt', [])
 call denite#custom#var('grep', 'separator', ['--'])
 call denite#custom#var('grep', 'final_opts', [])
-call denite#custom#source('file_rec', 'matchers', ['matcher_fuzzy', 'matcher_project_files'])
+call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
+      \ [ '*~', '*.o', '*.exe', '*.bak',
+      \ '.DS_Store', '*.pyc', '*.sw[po]', '*.class',
+      \ '.hg/', '.git/', '.bzr/', '.svn/',
+      \ 'node_modules/', 'bower_components/', 'tmp/', 'log/', 'vendor/ruby',
+      \ '.idea/', 'dist/',
+      \ 'tags', 'tags-*'])
+call denite#custom#source('file/rec', 'matchers', ['matcher_fuzzy', 'matcher_project_files', 'matcher_ignore_globs'])
 
-call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '--hidden', '-g',  ''])
+call denite#custom#var('file/rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '--hidden', '-g',  ''])
 
 " seleccionar buffer
 nnoremap <leader>s :Denite -mode=normal buffer<cr>
 
 " buscar un archivo
-nnoremap <C-p> :Denite -mode=normal file_rec<cr>
+nnoremap <C-p> :Denite -mode=normal file/rec<cr>
 
 " buscar en el contenido de un archivo (ag)
 nnoremap <leader>/ :Denite -mode=normal grep line<cr>
