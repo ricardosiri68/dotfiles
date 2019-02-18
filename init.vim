@@ -57,6 +57,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'echuraev/translate-shell.vim'
     Plug 'kshenoy/vim-signature'
     Plug 'jreybert/vimagit'
+    Plug 'wakatime/vim-wakatime'
 
 call plug#end()
 
@@ -120,7 +121,7 @@ inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<TAB>"
 
 " DENITE
 " ------------------------------------------------------------------------------------------------------------------------
-" set ignorecase
+set ignorecase
 call denite#custom#var('grep', 'command', ['ag'])
 call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
 call denite#custom#var('grep', 'recursive_opts', [])
