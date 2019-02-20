@@ -99,7 +99,7 @@ alias pbpaste='xsel --clipboard --output'
 export PATH="$PATH:$HOME/.config/composer/vendor/bin:$HOME/.cargo/bin"
 export XDG_CONFIG_HOME=$HOME/.config
 # vim default editor
-VISUAL=vim;
-export VISUAL EDITOR=nvim;
-export EDITOR
+
+export VISUAL=nvim;
+export EDITOR=nvim;
 alias help="tldr"
