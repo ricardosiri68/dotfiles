@@ -58,6 +58,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'kshenoy/vim-signature'
     Plug 'jreybert/vimagit'
     Plug 'wakatime/vim-wakatime'
+    Plug 'johnhamelink/blade.vim'
 
 call plug#end()
 
@@ -72,6 +73,7 @@ let g:ultisnips_php_scalar_types = 1
 "------------------------------------------------------------------------------------------------------------------------
 " enable gtags module
 let g:gutentags_modules = ['ctags', 'gtags_cscope']
+let g:gutentags_gtags_executable = 'gtags -iq'
 
 " config project root markers.
 let g:gutentags_project_root = ['.root']
@@ -97,7 +99,7 @@ let g:ale_php_phpcs_standard='phpcs.xml.dist'
 " let g:ale_php_phpmd_ruleset='phpmd.xml'
 let g:ale_fixers = {
   \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-  \ 'php': ['phpcbf', 'php_cs_fixer', 'remove_trailing_lines', 'trim_whitespace'],
+  \ 'php': ['phpcbf', 'remove_trailing_lines', 'trim_whitespace'],
   \}
 let g:ale_fix_on_save = 0
 
@@ -129,13 +131,12 @@ call denite#custom#var('grep', 'pattern_opt', [])
 call denite#custom#var('grep', 'separator', ['--'])
 call denite#custom#var('grep', 'final_opts', [])
 call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
-      \ [ '*~', '*.o', '*.exe', '*.bak',
-      \ '.DS_Store', '*.pyc', '*.sw[po]', '*.class',
-      \ '.hg/', '.git/', '.bzr/', '.svn/',
-      \ 'node_modules/', 'bower_components/', 'tmp/', 'log/', 'vendor/ruby',
-      \ '.idea/', 'dist/',
-      \ 'tags', 'tags-*'])
-call denite#custom#source('file/rec', 'matchers', ['matcher_fuzzy', 'matcher_project_files', 'matcher_ignore_globs'])
+    \ ['*~', '*.o', '*.exe', '*.bak',
+    \ '.DS_Store', '*.pyc', '*.sw[po]', '*.class',
+    \ '.hg/', '.git/', '.bzr/', '.svn/',
+    \ 'node_modules/', 'bower_components/', 'tmp/', 'log/', 'vendor/ruby', 'docker/db_data',
+    \ '.idea/', 'dist/', 'tags', 'tags-*' ])
+call denite#custom#source('file/rec', 'matchers', ['matcher_fuzzy', 'matcher_ignore_globs'])
 
 call denite#custom#var('file/rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '--hidden', '-g',  ''])
 
