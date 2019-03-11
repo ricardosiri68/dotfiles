@@ -34,6 +34,7 @@ endif
 call plug#begin('~/.config/nvim/plugged')
 
     Plug 'majutsushi/tagbar'
+    Plug 'fmoralesc/vim-tutor-mode'
     Plug 'ncm2/ncm2'
     Plug 'roxma/nvim-yarp'
     Plug 'ncm2/ncm2-bufword'

@@ -6,3 +6,4 @@ GTAGS
 tags.lock
 tags.temp
 tags
+.env/
