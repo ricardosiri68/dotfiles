@@ -5,7 +5,8 @@ set colorcolumn=80
 set modeline " tiene algo que ver con el identado pero no se realmente de que va
 set tw=79   " width of document (used by gd)
 set fo-=t   " don't automatically wrap text when typing
-set number " mustra la columna con el numero de linea
+set number relativenumber " mustra la columna con el numero de linea
+set cursorline
 set noswapfile " no genera archivos *.swp
 set nowrap
 set clipboard+=unnamedplus
@@ -59,6 +60,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'jreybert/vimagit'
     Plug 'wakatime/vim-wakatime'
     Plug 'johnhamelink/blade.vim'
+    Plug 'jeffkreeftmeijer/vim-numbertoggle'
 
 call plug#end()
 
