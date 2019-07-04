@@ -47,7 +47,8 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'skywind3000/gutentags_plus'
     Plug 'StanAngeloff/php.vim', {'for': 'php'}
     Plug 'w0rp/ale'
-    Plug 'Shougo/denite.nvim'
+    Plug '/usr/bin/fzf'
+    Plug 'junegunn/fzf.vim'
     Plug 'tpope/vim-fugitive'
     Plug 'airblade/vim-gitgutter'
     Plug 'iCyMind/NeoSolarized'
@@ -122,38 +123,14 @@ inoremap <silent> <expr> <CR> (pumvisible() ? ncm2_ultisnips#expand_or("\<CR>", 
 inoremap <expr> <TAB> pumvisible() ? "\<c-n>" : "\<TAB>"
 inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<TAB>"
 
-
-" DENITE
+" FZF
 " ------------------------------------------------------------------------------------------------------------------------
-set ignorecase
-call denite#custom#var('grep', 'command', ['ag'])
-call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', [])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
-call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
-    \ ['*~', '*.o', '*.exe', '*.bak',
-    \ '.DS_Store', '*.pyc', '*.sw[po]', '*.class',
-    \ '.hg/', '.git/', '.bzr/', '.svn/',
-    \ 'node_modules/', 'bower_components/', 'tmp/', 'log/', 'vendor/ruby', 'docker/db_data',
-    \ '.idea/', 'dist/', 'tags', 'tags-*' ])
-call denite#custom#source('file/rec', 'matchers', ['matcher_fuzzy', 'matcher_ignore_globs'])
-
-call denite#custom#var('file/rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '--hidden', '-g',  ''])
-
-" seleccionar buffer
-nnoremap <leader>s :Denite -mode=normal buffer<cr>
-
 " buscar un archivo
-nnoremap <C-p> :Denite -mode=normal file/rec<cr>
-
+nnoremap <C-p> :Files .<cr>
+" buscar un buffer
+nnoremap <leader>s :Buffers<cr>
 " buscar en el contenido de un archivo (ag)
-nnoremap <leader>/ :Denite -mode=normal grep line<cr>
-
-" moviendonos en el historial del yank
-" nnoremap <space>y :Unite history/yank<cr>
-nnoremap <leader>y :Denite -mode=normal register<cr>
+nnoremap <leader>/ :Ag<cr>
 
 " COLORSCHEME
 " ------------------------------------------------------------------------------------------------------------------------
