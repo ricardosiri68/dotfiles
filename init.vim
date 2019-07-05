@@ -76,7 +76,7 @@ let g:ultisnips_php_scalar_types = 1
 "------------------------------------------------------------------------------------------------------------------------
 " enable gtags module
 let g:gutentags_modules = ['ctags', 'gtags_cscope']
-let g:gutentags_gtags_executable = 'gtags -iq'
+let g:gutentags_gtags_executable = 'phptags'
 
 " config project root markers.
 let g:gutentags_project_root = ['.root']
@@ -125,6 +125,7 @@ inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<TAB>"
 
 " FZF
 " ------------------------------------------------------------------------------------------------------------------------
+let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 " buscar un archivo
 nnoremap <C-p> :Files .<cr>
 " buscar un buffer

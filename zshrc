@@ -103,3 +103,4 @@ export XDG_CONFIG_HOME=$HOME/.config
 export VISUAL=nvim;
 export EDITOR=nvim;
 alias help="tldr"
+alias phptags="find **/*.php -type f -print > /tmp/file_list && gtags -f /tmp/file_list"
