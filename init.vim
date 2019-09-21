@@ -48,7 +48,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'skywind3000/gutentags_plus'
     Plug 'StanAngeloff/php.vim', {'for': 'php'}
     Plug 'w0rp/ale'
-    Plug '/usr/bin/fzf'
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     Plug 'junegunn/fzf.vim'
     Plug 'tpope/vim-fugitive'
     Plug 'airblade/vim-gitgutter'

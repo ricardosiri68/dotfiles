@@ -105,3 +105,5 @@ export EDITOR=nvim;
 alias help="tldr"
 alias phptags="find **/*.php -type f -print > /tmp/file_list && gtags -f /tmp/file_list"
 alias sartisan="docker-compose exec sga php artisan"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
