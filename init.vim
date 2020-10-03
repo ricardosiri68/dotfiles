@@ -11,6 +11,8 @@ set noswapfile " no genera archivos *.swp
 set nowrap
 set clipboard+=unnamedplus
 set nohlsearch
+set encoding=UTF-8
+set guifont=DroidSansMono\ Nerd\ Font\ 11
 let mapleader=" " " mapea la tecla lider para que sea la barra espaciadora
 filetype plugin indent on
 
@@ -41,7 +43,6 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'ncm2/ncm2-path'
     Plug 'neomake/neomake'
     Plug 'phpactor/phpactor', { 'do': ':call phpactor#Update()', 'for': 'php'}
-    Plug 'phpactor/ncm2-phpactor', {'for': 'php'}
     Plug 'ncm2/ncm2-ultisnips'
     Plug 'SirVer/ultisnips' | Plug 'phux/vim-snippets'
     Plug 'ludovicchabant/vim-gutentags'
@@ -54,15 +55,13 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'airblade/vim-gitgutter'
     Plug 'iCyMind/NeoSolarized'
     Plug 'mattn/emmet-vim'
-    Plug 'leafgarland/typescript-vim'
     Plug 'posva/vim-vue'
-    Plug 'dzeban/vim-log-syntax'
-    Plug 'echuraev/translate-shell.vim'
     Plug 'kshenoy/vim-signature'
     Plug 'jreybert/vimagit'
     Plug 'wakatime/vim-wakatime'
-    Plug 'johnhamelink/blade.vim'
     Plug 'jeffkreeftmeijer/vim-numbertoggle'
+    Plug 'ryanoasis/vim-devicons'
+    Plug 'sheerun/vim-polyglot'
 
 call plug#end()
 
@@ -107,16 +106,6 @@ let g:ale_fixers = {
   \}
 let g:ale_fix_on_save = 0
 
-
-" AUTOCOMPLETION
-"------------------------------------------------------------------------------------------------------------------------
-augroup ncm2
-  au!
-  autocmd BufEnter * call ncm2#enable_for_buffer()
-  au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
-  au User Ncm2PopupClose set completeopt=menuone
-augroup END
-
 " parameter expansion for selected entry via Enter
 inoremap <silent> <expr> <CR> (pumvisible() ? ncm2_ultisnips#expand_or("\<CR>", 'n') : "\<CR>")
 
@@ -129,6 +118,7 @@ inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<TAB>"
 let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 " buscar un archivo
 nnoremap <C-p> :Files .<cr>
+" nnoremap <silent> <leader>f :call Fzf_dev()<CR> TODO: WAIT for release 0.5 of Neovim
 " buscar un buffer
 nnoremap <leader>s :Buffers<cr>
 " buscar en el contenido de un archivo (ag)
@@ -177,3 +167,75 @@ let g:trans_save_history = 1
 let g:trans_advanced_options = "-brief -e bing"
 let g:trans_default_direction = ":pt+es"
 vnoremap <silent> <leader>T :Trans -brief<CR>
+
+" FZF
+" floating fzf window with borders
+function! CreateCenteredFloatingWindow()
+    let width = min([&columns - 4, max([80, &columns - 20])])
+    let height = min([&lines - 4, max([20, &lines - 10])])
+    let top = ((&lines - height) / 2) - 1
+    let left = (&columns - width) / 2
+    let opts = {'relative': 'editor', 'row': top, 'col': left, 'width': width, 'height': height, 'style': 'minimal'}
+
+    let top = "╭" . repeat("─", width - 2) . "╮"
+    let mid = "│" . repeat(" ", width - 2) . "│"
+    let bot = "╰" . repeat("─", width - 2) . "╯"
+    let lines = [top] + repeat([mid], height - 2) + [bot]
+    let s:buf = nvim_create_buf(v:false, v:true)
+    call nvim_buf_set_lines(s:buf, 0, -1, v:true, lines)
+    call nvim_open_win(s:buf, v:true, opts)
+    set winhl=Normal:Floating
+    let opts.row += 1
+    let opts.height -= 2
+    let opts.col += 2
+    let opts.width -= 4
+    call nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
+    au BufWipeout <buffer> exe 'bw '.s:buf
+endfunction
+
+" Files + devicons + floating fzf
+function! Fzf_dev()
+  let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {2..-1} | head -'.&lines.'"'
+  function! s:files()
+    let l:files = split(system($FZF_DEFAULT_COMMAND), '\n')
+    return s:prepend_icon(l:files)
+  endfunction
+
+  function! s:prepend_icon(candidates)
+    let l:result = []
+    for l:candidate in a:candidates
+      let l:filename = fnamemodify(l:candidate, ':p:t')
+      let l:icon = WebDevIconsGetFileTypeSymbol(l:filename, isdirectory(l:filename))
+      call add(l:result, printf('%s %s', l:icon, l:candidate))
+    endfor
+
+    return l:result
+  endfunction
+
+  function! s:edit_file(item)
+    let l:pos = stridx(a:item, ' ')
+    let l:file_path = a:item[pos+1:-1]
+    execute 'silent e' l:file_path
+  endfunction
+
+  call fzf#run({
+        \ 'source': <sid>files(),
+        \ 'sink':   function('s:edit_file'),
+        \ 'options': '-m --reverse ' . l:fzf_files_options,
+        \ 'down':    '40%',
+        \ 'window': 'call CreateCenteredFloatingWindow()'})
+
+endfunction
+
+" FZF TODO: WAIT to 0.5.0 neovim version its available
+
+" general
+" let g:fzf_layout = { 'window': 'call CreateCenteredFloatingWindow()' }
+" let $FZF_DEFAULT_OPTS="--reverse " " top to bottom
+
+" use rg by default
+if executable('rg')
+  let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
+  set grepprg=rg\ --vimgrep
+  command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
+endif
