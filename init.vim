@@ -35,33 +35,32 @@ endif
 
 call plug#begin('~/.config/nvim/plugged')
 
+" GENERAL PLUGINS
+"------------------------------------------------------------------------------------------------------------------------
     Plug 'majutsushi/tagbar'
     Plug 'fmoralesc/vim-tutor-mode'
-    Plug 'ncm2/ncm2'
-    Plug 'roxma/nvim-yarp'
-    Plug 'ncm2/ncm2-bufword'
-    Plug 'ncm2/ncm2-path'
     Plug 'neomake/neomake'
-    Plug 'phpactor/phpactor', { 'do': ':call phpactor#Update()', 'for': 'php'}
-    Plug 'ncm2/ncm2-ultisnips'
     Plug 'SirVer/ultisnips' | Plug 'phux/vim-snippets'
-    Plug 'ludovicchabant/vim-gutentags'
-    Plug 'skywind3000/gutentags_plus'
-    Plug 'StanAngeloff/php.vim', {'for': 'php'}
-    Plug 'w0rp/ale'
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     Plug 'junegunn/fzf.vim'
     Plug 'tpope/vim-fugitive'
     Plug 'airblade/vim-gitgutter'
     Plug 'iCyMind/NeoSolarized'
     Plug 'mattn/emmet-vim'
-    Plug 'posva/vim-vue'
     Plug 'kshenoy/vim-signature'
     Plug 'jreybert/vimagit'
     Plug 'wakatime/vim-wakatime'
     Plug 'jeffkreeftmeijer/vim-numbertoggle'
     Plug 'ryanoasis/vim-devicons'
     Plug 'sheerun/vim-polyglot'
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'sbdchd/neoformat'
+    Plug 'neovim/nvim-lspconfig'
+
+    " PYTHON
+    "---------------------------------------------------------------------------
+    Plug 'davidhalter/jedi-vim'
+    Plug 'zchee/deoplete-jedi'
 
 call plug#end()
 
@@ -71,47 +70,6 @@ let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 let g:ultisnips_php_scalar_types = 1
-
-" GUTENTAGS
-"------------------------------------------------------------------------------------------------------------------------
-" enable gtags module
-let g:gutentags_modules = ['ctags', 'gtags_cscope']
-let g:gutentags_gtags_executable = 'phptags'
-
-" config project root markers.
-let g:gutentags_project_root = ['.root']
-
-" generate datebases in my cache directory, prevent gtags files polluting my project
-" let g:gutentags_cache_dir = expand('~/.cache/tags')
-
-" change focus to quickfix window after search (optional).
-let g:gutentags_plus_switch = 1
-
-" ALE
-"------------------------------------------------------------------------------------------------------------------------
-" disable linting while typing
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_enter = 0
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_open_list = 1
-let g:ale_keep_list_window_open=0
-let g:ale_set_quickfix=0
-let g:ale_list_window_size = 5
-let g:ale_php_phpcbf_standard='PSR2'
-let g:ale_php_phpcs_standard='phpcs.xml.dist'
-" let g:ale_php_phpmd_ruleset='phpmd.xml'
-let g:ale_fixers = {
-  \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-  \ 'php': ['phpcbf', 'remove_trailing_lines', 'trim_whitespace'],
-  \}
-let g:ale_fix_on_save = 0
-
-" parameter expansion for selected entry via Enter
-inoremap <silent> <expr> <CR> (pumvisible() ? ncm2_ultisnips#expand_or("\<CR>", 'n') : "\<CR>")
-
-" cycle through completion entries with tab/shift+tab
-inoremap <expr> <TAB> pumvisible() ? "\<c-n>" : "\<TAB>"
-inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<TAB>"
 
 " FZF
 " ------------------------------------------------------------------------------------------------------------------------
@@ -124,51 +82,6 @@ nnoremap <leader>s :Buffers<cr>
 " buscar en el contenido de un archivo (ag)
 nnoremap <leader>/ :Ag<cr>
 
-" COLORSCHEME
-" ------------------------------------------------------------------------------------------------------------------------
-set termguicolors
-colorscheme NeoSolarized
-
-" BUFFER NAVIGATION
-" ------------------------------------------------------------------------------------------------------------------------
-" next and previous buffer
-nnoremap <C-n> :bn<cr>
-nnoremap <C-b> :bp<cr>
-
-" WINDOWS NAVIGATION
-" ------------------------------------------------------------------------------------------------------------------------
-" jump split
-nnoremap <C-h> <C-w>h
-nnoremap <C-l> <C-w>l
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-
-" NETRW
-" ------------------------------------------------------------------------------------------------------------------------
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_preview = 1
-map <F2> :Ex .<CR>
-
-" TAGBAR
-" ------------------------------------------------------------------------------------------------------------------------
-let g:tagbar_width = 60
-nmap <F3> :TagbarToggle<CR>
-nmap <leader>t :TagbarOpen j<CR>
-
-" EMMET
-"------------------------------------------------------------------------------------------------------------------------
-autocmd FileType html,css,js,ts EmmetInstall
-
-" TRANS
-"------------------------------------------------------------------------------------------------------------------------
-let g:trans_history_file = '~/trans_history.csv'
-let g:trans_save_history = 1
-let g:trans_advanced_options = "-brief -e bing"
-let g:trans_default_direction = ":pt+es"
-vnoremap <silent> <leader>T :Trans -brief<CR>
-
-" FZF
 " floating fzf window with borders
 function! CreateCenteredFloatingWindow()
     let width = min([&columns - 4, max([80, &columns - 20])])
@@ -230,8 +143,8 @@ endfunction
 " FZF TODO: WAIT to 0.5.0 neovim version its available
 
 " general
-" let g:fzf_layout = { 'window': 'call CreateCenteredFloatingWindow()' }
-" let $FZF_DEFAULT_OPTS="--reverse " " top to bottom
+let g:fzf_layout = { 'window': 'call CreateCenteredFloatingWindow()' }
+let $FZF_DEFAULT_OPTS="--reverse " " top to bottom
 
 " use rg by default
 if executable('rg')
@@ -239,3 +152,79 @@ if executable('rg')
   set grepprg=rg\ --vimgrep
   command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
 endif
+
+" COLORSCHEME
+" ------------------------------------------------------------------------------------------------------------------------
+set termguicolors
+colorscheme NeoSolarized
+
+" BUFFER NAVIGATION
+" ------------------------------------------------------------------------------------------------------------------------
+" next and previous buffer
+nnoremap <C-n> :bn<cr>
+nnoremap <C-b> :bp<cr>
+
+" WINDOWS NAVIGATION
+" ------------------------------------------------------------------------------------------------------------------------
+" jump split
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+
+" NETRW
+" ------------------------------------------------------------------------------------------------------------------------
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_preview = 1
+map <F2> :Ex .<CR>
+
+" TAGBAR
+" ------------------------------------------------------------------------------------------------------------------------
+let g:tagbar_width = 60
+nmap <F3> :TagbarToggle<CR>
+nmap <leader>t :TagbarOpen j<CR>
+
+" EMMET
+"------------------------------------------------------------------------------------------------------------------------
+autocmd FileType html,css,js,ts EmmetInstall
+
+" DEOPLETE
+"------------------------------------------------------------------------------------------------------------------------
+let g:deoplete#enable_at_startup = 1
+"
+" disable autocompletion, cause we use deoplete for completion
+let g:jedi#completions_enabled = 0
+
+" open the go-to function in split, not another buffer
+let g:jedi#use_splits_not_buffers = "right"
+
+" NEOFORMAT
+"------------------------------------------------------------------------------------------------------------------------
+let g:deoplete#enable_at_startup = 1
+" Enable alignment
+let g:neoformat_basic_format_align = 1
+
+" Enable tab to spaces conversion
+let g:neoformat_basic_format_retab = 1
+
+" Enable trimmming of trailing whitespace
+let g:neoformat_basic_format_trim = 1
+
+" NEOMAKE
+"------------------------------------------------------------------------------------------------------------------------
+let g:neomake_highlight_columns = 0
+let g:neomake_highlight_lines = 1
+let g:neomake_place_signs = 1
+let g:neomake_python_enabled_makers = ['python', 'flake8', 'mypy', 'pylint']
+let g:neomake_shellcheck_args = ['-fgcc']
+
+" When writing a buffer (no delay).
+call neomake#configure#automake('w')
+" When writing a buffer (no delay), and on normal mode changes (after 750ms).
+call neomake#configure#automake('nw', 750)
+" When reading a buffer (after 1s), and when writing (no delay).
+call neomake#configure#automake('rw', 1000)
+" Full config: when writing or reading a buffer, and on changes in insert and
+" normal mode (after 500ms; no delay when writing).
+call neomake#configure#automake('nrwi', 500)
