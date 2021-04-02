@@ -37,7 +37,7 @@ call plug#begin('~/.config/nvim/plugged')
 
 " GENERAL PLUGINS
 "------------------------------------------------------------------------------------------------------------------------
-    Plug 'majutsushi/tagbar'
+    Plug 'tracyone/fzf-funky',{'on': 'FzfFunky'}
     Plug 'fmoralesc/vim-tutor-mode'
     Plug 'neomake/neomake'
     Plug 'SirVer/ultisnips' | Plug 'phux/vim-snippets'
@@ -71,16 +71,6 @@ let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 let g:ultisnips_php_scalar_types = 1
 
-" FZF
-" ------------------------------------------------------------------------------------------------------------------------
-let $FZF_DEFAULT_COMMAND = 'ag -g ""'
-" buscar un archivo
-nnoremap <C-p> :Files .<cr>
-" nnoremap <silent> <leader>f :call Fzf_dev()<CR> TODO: WAIT for release 0.5 of Neovim
-" buscar un buffer
-nnoremap <leader>s :Buffers<cr>
-" buscar en el contenido de un archivo (ag)
-nnoremap <leader>/ :Ag<cr>
 
 " floating fzf window with borders
 function! CreateCenteredFloatingWindow()
@@ -179,12 +169,6 @@ let g:netrw_liststyle = 3
 let g:netrw_preview = 1
 map <F2> :Ex .<CR>
 
-" TAGBAR
-" ------------------------------------------------------------------------------------------------------------------------
-let g:tagbar_width = 60
-nmap <F3> :TagbarToggle<CR>
-nmap <leader>t :TagbarOpen j<CR>
-
 " EMMET
 "------------------------------------------------------------------------------------------------------------------------
 autocmd FileType html,css,js,ts EmmetInstall
@@ -201,7 +185,6 @@ let g:jedi#use_splits_not_buffers = "right"
 
 " NEOFORMAT
 "------------------------------------------------------------------------------------------------------------------------
-let g:deoplete#enable_at_startup = 1
 " Enable alignment
 let g:neoformat_basic_format_align = 1
 
@@ -228,3 +211,20 @@ call neomake#configure#automake('rw', 1000)
 " Full config: when writing or reading a buffer, and on changes in insert and
 " normal mode (after 500ms; no delay when writing).
 call neomake#configure#automake('nrwi', 500)
+
+" FZF Funky
+"------------------------------------------------------------------------------------------------------------------------
+nnoremap <Leader>fu :FzfFunky<Cr>
+" narrow the list down with a word under cursor
+nnoremap <Leader>fU :execute 'FzfFunky ' . expand('<cword>')<Cr>
+"
+" FZF
+" ------------------------------------------------------------------------------------------------------------------------
+let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+" buscar un archivo
+nnoremap <C-p> :Files .<cr>
+" nnoremap <silent> <leader>f :call Fzf_dev()<CR> TODO: WAIT for release 0.5 of Neovim
+" buscar un buffer
+nnoremap <leader>b :Buffers<cr>
+" buscar en el contenido de un archivo (ag)
+nnoremap <leader>/ :Ag<cr>

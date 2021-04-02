@@ -3,6 +3,7 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
+export PATH="$HOME/.local/bin:$PATH"
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -105,5 +106,6 @@ export EDITOR=nvim;
 alias help="tldr"
 alias phptags="find **/*.php -type f -print > /tmp/file_list && gtags -f /tmp/file_list"
 alias sartisan="docker-compose exec sga php artisan"
+alias vpn_nubi="cd $HOME/vpn/ricardo.siri/ && ./vpn_start.sh && sudo openvpn --config $HOME/vpn/ricardo.siri/nubivpn_awsorg.ovpn --auth-user-pass ~/.cache/.ovpn-tmp"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
