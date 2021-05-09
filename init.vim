@@ -35,24 +35,37 @@ endif
 
 call plug#begin('~/.config/nvim/plugged')
 
-" GENERAL PLUGINS
-"------------------------------------------------------------------------------
-    Plug 'fmoralesc/vim-tutor-mode'
+    " GENERAL PLUGINS
+    "--------------------------------------------------------------------------
     Plug 'neomake/neomake'
+    Plug 'fmoralesc/vim-tutor-mode'
     Plug 'SirVer/ultisnips' | Plug 'phux/vim-snippets'
-    Plug 'tpope/vim-fugitive'
-    Plug 'airblade/vim-gitgutter'
     Plug 'iCyMind/NeoSolarized'
-    Plug 'mattn/emmet-vim'
     Plug 'kshenoy/vim-signature'
-    Plug 'jreybert/vimagit'
     Plug 'wakatime/vim-wakatime'
     Plug 'jeffkreeftmeijer/vim-numbertoggle'
-    Plug 'ryanoasis/vim-devicons'
+
+    " NOT LSP
+    "--------------------------------------------------------------------------
     Plug 'sheerun/vim-polyglot'
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     Plug 'sbdchd/neoformat'
+
+    " LSP
+    "--------------------------------------------------------------------------
     Plug 'neovim/nvim-lspconfig'
+    Plug 'prabirshrestha/asyncomplete.vim'
+    Plug 'prabirshrestha/vim-lsp'
+    Plug 'prabirshrestha/asyncomplete-lsp.vim'
+
+    " HTML|CSS
+    "--------------------------------------------------------------------------
+    Plug 'mattn/emmet-vim'
+
+    " GIT
+    "--------------------------------------------------------------------------
+    Plug 'jreybert/vimagit'
+    Plug 'airblade/vim-gitgutter'
+    Plug 'tpope/vim-fugitive'
 
     " TELESCOPE
     "--------------------------------------------------------------------------
@@ -64,11 +77,6 @@ call plug#begin('~/.config/nvim/plugged')
     " TREESITTER
     "--------------------------------------------------------------------------
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
-
-    " PYTHON
-    "--------------------------------------------------------------------------
-    Plug 'davidhalter/jedi-vim'
-    Plug 'zchee/deoplete-jedi'
 
 call plug#end()
 
@@ -109,16 +117,6 @@ map <F2> :Ex .<CR>
 "------------------------------------------------------------------------------
 autocmd FileType html,css,js,ts EmmetInstall
 
-" DEOPLETE
-"------------------------------------------------------------------------------
-let g:deoplete#enable_at_startup = 1
-"
-" disable autocompletion, cause we use deoplete for completion
-let g:jedi#completions_enabled = 0
-
-" open the go-to function in split, not another buffer
-let g:jedi#use_splits_not_buffers = "right"
-
 " NEOFORMAT
 "------------------------------------------------------------------------------
 " Enable alignment
@@ -147,6 +145,77 @@ call neomake#configure#automake('rw', 1000)
 " Full config: when writing or reading a buffer, and on changes in insert and
 " normal mode (after 500ms; no delay when writing).
 call neomake#configure#automake('nrwi', 500)
+
+" LSP - PYTHON
+"------------------------------------------------------------------------------
+" deoplete keymap
+inoremap <C-x><C-o> <C-n>
+
+lua << EOF
+local lspconfig = require('lspconfig')
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+
+  -- Set some keybinds conditional on server capabilities
+  if client.resolved_capabilities.document_formatting then
+    buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+  end
+  if client.resolved_capabilities.document_range_formatting then
+    buf_set_keymap("v", "<space>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+  end
+
+  -- Set autocommands conditional on server_capabilities
+  if client.resolved_capabilities.document_highlight then
+    vim.api.nvim_exec([[
+      hi LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
+      hi LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
+      hi LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
+      augroup lsp_document_highlight
+        autocmd! * <buffer>
+        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
+        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+      augroup END
+    ]], false)
+  end
+end
+
+-- Use a loop to conveniently both setup defined servers
+-- and map buffer local keybindings when the language server attaches
+local servers = { "pyls" }
+for _, lsp in ipairs(servers) do
+  lspconfig[lsp].setup { on_attach = on_attach }
+end
+EOF
+
+" ASYNCOMPLETE
+" -----------------------------------------------------------------------------
+if executable('pyls')
+    " pip install python-language-server
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'allowlist': ['python'],
+        \ })
+endif
 
 " TELESCOPE
 " -----------------------------------------------------------------------------
@@ -198,6 +267,8 @@ nnoremap <leader>fT <cmd>Telescope filetypes<cr>
 nnoremap <leader>hl <cmd>Telescope highlights<cr>
 "  	Searches in current buffer lines.
 nnoremap <leader>bf <cmd>Telescope current_buffer_fuzzy_find<cr>
+"  	GIT
+" -----------------------------------------------------------------------------
 "  	Lists git files in the current working tree
 nnoremap <leader>gf <cmd>Telescope git_files<cr>
 "  	Lists git commits with diff preview and on enter checkout the commit.
@@ -210,3 +281,10 @@ nnoremap <leader>gb <cmd>Telescope git_branches<cr>
 "  	Lists current changes per file with diff preview and add action.
 "  	(Multi-selection still WIP)
 nnoremap <leader>gs <cmd>Telescope git_status<cr>
+" LSP - TELESCOPE
+" -----------------------------------------------------------------------------
+" List of definitions of the word under the cursor
+nnoremap <leader>gd <cmd>Telescope lsp_definitions<cr>
+" List to references of the word under the cursor
+nnoremap <leader>gr <cmd>Telescope lsp_references<cr>
+nnoremap <leader>ds <cmd>Telescope lsp_document_symbols<cr>
