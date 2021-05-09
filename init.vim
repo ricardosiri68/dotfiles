@@ -35,24 +35,39 @@ endif
 
 call plug#begin('~/.config/nvim/plugged')
 
-" GENERAL PLUGINS
-"------------------------------------------------------------------------------
-    Plug 'fmoralesc/vim-tutor-mode'
+    " GENERAL PLUGINS
+    "--------------------------------------------------------------------------
     Plug 'neomake/neomake'
+    Plug 'fmoralesc/vim-tutor-mode'
     Plug 'SirVer/ultisnips' | Plug 'phux/vim-snippets'
-    Plug 'tpope/vim-fugitive'
-    Plug 'airblade/vim-gitgutter'
     Plug 'iCyMind/NeoSolarized'
-    Plug 'mattn/emmet-vim'
     Plug 'kshenoy/vim-signature'
-    Plug 'jreybert/vimagit'
     Plug 'wakatime/vim-wakatime'
     Plug 'jeffkreeftmeijer/vim-numbertoggle'
-    Plug 'ryanoasis/vim-devicons'
+
+    " NOT LSP
+    "--------------------------------------------------------------------------
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+    Plug 'tracyone/fzf-funky',{'on': 'FzfFunky'}
     Plug 'sheerun/vim-polyglot'
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     Plug 'sbdchd/neoformat'
+
+    " LSP
+    "--------------------------------------------------------------------------
     Plug 'neovim/nvim-lspconfig'
+    Plug 'prabirshrestha/vim-lsp'
+    Plug 'lighttiger2505/deoplete-vim-lsp'
+
+    " HTML|CSS
+    "--------------------------------------------------------------------------
+    Plug 'mattn/emmet-vim'
+
+    " GIT
+    "--------------------------------------------------------------------------
+    Plug 'jreybert/vimagit'
+    Plug 'airblade/vim-gitgutter'
+    Plug 'tpope/vim-fugitive'
 
     " TELESCOPE
     "--------------------------------------------------------------------------
@@ -109,16 +124,6 @@ map <F2> :Ex .<CR>
 "------------------------------------------------------------------------------
 autocmd FileType html,css,js,ts EmmetInstall
 
-" DEOPLETE
-"------------------------------------------------------------------------------
-let g:deoplete#enable_at_startup = 1
-"
-" disable autocompletion, cause we use deoplete for completion
-let g:jedi#completions_enabled = 0
-
-" open the go-to function in split, not another buffer
-let g:jedi#use_splits_not_buffers = "right"
-
 " NEOFORMAT
 "------------------------------------------------------------------------------
 " Enable alignment
@@ -147,6 +152,54 @@ call neomake#configure#automake('rw', 1000)
 " Full config: when writing or reading a buffer, and on changes in insert and
 " normal mode (after 500ms; no delay when writing).
 call neomake#configure#automake('nrwi', 500)
+
+" LSP - PYTHON
+"------------------------------------------------------------------------------
+let g:deoplete#enable_at_startup = 1
+
+if executable('pyls')
+    " pip install python-language-server
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'allowlist': ['python'],
+        \ })
+endif
+
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    nmap <buffer> K <plug>(lsp-hover)
+    inoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    inoremap <buffer> <expr><c-d> lsp#scroll(-4)
+
+    let g:lsp_format_sync_timeout = 1000
+    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
+
+    " refer to doc to add more commands
+endfunction
+
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+
+" FZF Funky
+"------------------------------------------------------------------------------
+nnoremap <Leader>fu :FzfFunky<Cr>
+" narrow the list down with a word under cursor
+nnoremap <Leader>fU :execute 'FzfFunky ' . expand('<cword>')<Cr>
 
 " TELESCOPE
 " -----------------------------------------------------------------------------
