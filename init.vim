@@ -37,8 +37,6 @@ call plug#begin('~/.config/nvim/plugged')
 
 " GENERAL PLUGINS
 "------------------------------------------------------------------------------
-    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-    Plug 'tracyone/fzf-funky',{'on': 'FzfFunky'}
     Plug 'fmoralesc/vim-tutor-mode'
     Plug 'neomake/neomake'
     Plug 'SirVer/ultisnips' | Plug 'phux/vim-snippets'
@@ -62,7 +60,10 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'nvim-lua/popup.nvim'
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim'
-
+    
+    " TREESITTER
+    "--------------------------------------------------------------------------
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 
     " PYTHON
     "--------------------------------------------------------------------------
@@ -147,12 +148,6 @@ call neomake#configure#automake('rw', 1000)
 " normal mode (after 500ms; no delay when writing).
 call neomake#configure#automake('nrwi', 500)
 
-" FZF Funky
-"------------------------------------------------------------------------------
-nnoremap <Leader>fu :FzfFunky<Cr>
-" narrow the list down with a word under cursor
-nnoremap <Leader>fU :execute 'FzfFunky ' . expand('<cword>')<Cr>
-
 " TELESCOPE
 " -----------------------------------------------------------------------------
 " List all files for a search
@@ -167,6 +162,8 @@ nnoremap <leader>fb <cmd>Telescope buffers show_all_buffers=true<cr>
 nnoremap <leader>fO <cmd>Telescope oldfiles<cr>
 "  	Lists Open buffers in the current vim instance.
 nnoremap <leader>fB <cmd>Telescope file_browser<cr>
+"  	Lists treesitter maps of the current buffer
+nnoremap <leader>tt <cmd>Telescope treesitter<cr>
 "  	Lists Available plugin/user commands and run it.
 nnoremap <leader>fc <cmd>Telescope commands<cr>
 "  	Lists Commands previously ran and run it on enter.
