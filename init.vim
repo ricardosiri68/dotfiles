@@ -73,6 +73,10 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'nvim-lua/popup.nvim'
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim'
+
+    " FILE EXPLORER
+    "--------------------------------------------------------------------------
+    Plug 'kyazdani42/nvim-tree.lua'
     
     " TREESITTER
     "--------------------------------------------------------------------------
@@ -106,12 +110,10 @@ nnoremap <C-l> <C-w>l
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 
-" NETRW
+" NvimTreee - FILE EXPLORER
 " -----------------------------------------------------------------------------
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_preview = 1
-map <F2> :Ex .<CR>
+lua require'nvim-tree'.setup{view = { width = 60 } }
+nnoremap <F2> :NvimTreeToggle<CR>
 
 " EMMET
 "------------------------------------------------------------------------------
@@ -133,7 +135,7 @@ let g:neoformat_basic_format_trim = 1
 let g:neomake_highlight_columns = 0
 let g:neomake_highlight_lines = 1
 let g:neomake_place_signs = 1
-let g:neomake_python_enabled_makers = ['python', 'flake8', 'mypy', 'pylint']
+let g:neomake_python_enabled_makers = ['python', 'flake8', 'mypy']
 let g:neomake_shellcheck_args = ['-fgcc']
 
 " When writing a buffer (no delay).
@@ -162,7 +164,6 @@ local on_attach = function(client, bufnr)
   -- Mappings.
   local opts = { noremap=true, silent=true }
   buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
@@ -192,22 +193,25 @@ local on_attach = function(client, bufnr)
   end
 end
 
-lspconfig["pyls"].setup { on_attach = on_attach }
+lspconfig.pylsp.setup{}
 EOF
 
 " ASYNCOMPLETE
 " -----------------------------------------------------------------------------
-if executable('pyls')
+if executable('pylsp')
     " pip install python-language-server
     au User lsp_setup call lsp#register_server({
-        \ 'name': 'pyls',
-        \ 'cmd': {server_info->['pyls']},
+        \ 'name': 'pylsp',
+        \ 'cmd': {server_info->['pylsp']},
         \ 'allowlist': ['python'],
         \ })
 endif
 
 " TELESCOPE
 " -----------------------------------------------------------------------------
+
+lua require'telescope'.setup{ defaults = { layout_strategy = "vertical" } }
+
 " List all files for a search
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 " List the result of a grep search

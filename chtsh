@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+languages=`echo "python sql mongodb bash" | tr ' ' '\n'`
+coreutils=`echo "xargs grep find mv tr sed awk chmod chown" | tr ' '  '\n'`
+
+selected=`printf "$languages\n$coreutils" | fzf`
+read -p "query: " query
+
+if printf "$languages" | grep -q $selected; then
+	curl cht.sh/$selected/`echo $query | tr ' ' '+'`
+else
+	curl cht.sh/$selected~$query
+fi
