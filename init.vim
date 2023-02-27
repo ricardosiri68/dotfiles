@@ -281,3 +281,5 @@ nnoremap <leader>gd <cmd>Telescope lsp_definitions<cr>
 " List to references of the word under the cursor
 nnoremap <leader>gr <cmd>Telescope lsp_references<cr>
 nnoremap <leader>ds <cmd>Telescope lsp_document_symbols<cr>
+
+
